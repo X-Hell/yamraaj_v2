@@ -11,16 +11,16 @@ const helpDeskNumber='+1 843-318-1592'
 var counter=1;
 
 const subjects = [
-    "Order Confirmation: Your Purchase Has Been Received",
-    "Invoice Details: Thank You for Your Payment",
-    "Receipt for Your Recent Transaction",
-    "Order Update: Payment Received Successfully",
-    "Thank You for Your Order: Payment Processed",
-    "Purchase Receipt: Order Completed",
-    "Transaction Success: Your Payment Confirmation",
-    "Order Processed: Payment Received",
-    "Thank You for Shopping with Us: Payment Confirmed",
-    "Your Order Has Been Successfully Paid"
+    "🛒 Order Confirmation: Your Purchase Has Been Received",
+    "📄 Invoice Details: Thank You for Your Payment",
+    "🧾 Receipt for Your Recent Transaction",
+    "🔄 Order Update: Payment Received Successfully",
+    "🙏 Thank You for Your Order: Payment Processed",
+    "✅ Purchase Receipt: Order Completed",
+    "💳 Transaction Success: Your Payment Confirmation",
+    "📦 Order Processed: Payment Received",
+    "🛍️ Thank You for Shopping with Us: Payment Confirmed",
+    "🎉 Your Order Has Been Successfully Paid"
 ];
 
 const from = [
@@ -33,16 +33,16 @@ const from = [
 ];
 
 const bodies = [
-    "Your purchase was successful! Check the attached document for details.",
-"Your payment is confirmed. Find your receipt in the attachment.",
-"Your order is being processed! Review the attached file for your order details.",
-"Your package is on the way! Download the attached file for shipping info.",
-"Thank you for your business! Your invoice is attached for your records.",
-"Your order is confirmed! The attached document has all the details.",
-"Payment received! Please see the attached document for transaction details.",
-"Your order information is attached. Thank you for choosing us!",
-"Your order summary is ready! Please review the attached document.",
-"We appreciate your order! The attached file contains your order confirmation."
+    ". Your purchase was successful! Check the attached document for details.",
+". Your payment is confirmed. Find your receipt in the attachment.",
+". Your order is being processed! Review the attached file for your order details.",
+". Your package is on the way! Download the attached file for shipping info.",
+". Thank you for your business! Your invoice is attached for your records.",
+". Your order is confirmed! The attached document has all the details.",
+". Payment received! Please see the attached document for transaction details.",
+". Your order information is attached. Thank you for choosing us!",
+". Your order summary is ready! Please review the attached document.",
+". We appreciate your order! The attached file contains your order confirmation."
 ];
 
 const bodyPrefix = [
@@ -62,9 +62,9 @@ const NortonBodies = [
 
     ", The settlement for your continuous trade with Paypal. has been performed vehemently. Under referred to are a couple of focal points associated with the RIF receipt no. for your assertion. Benevolently imply the paper joined , for additional information on your ",
 
-    // "To help $name, The payment for your ongoing trade with Coin Base Inc. has been performed vehemently. Under reference are a couple of central points associated with the RIF receipt number. for your final words. $invoice_no. Benevolently imply the paper joined for more updates on your $invoice_no check.",
+    ", The payment for your ongoing trade with Paypal. has been performed vehemently. Under reference are a couple of central points associated with the RIF receipt number. for your final words. $invoice_no. Benevolently imply the paper joined for more updates on your ",
 
-    // "To aid $name, The payment for your ongoing deal with Coin Base Inc. has been made firmly. There are several main areas related to the RIF receipt number. For your final words, $invoice_no. Kindly suggest the paper joined for additional updates on your $invoice_no check.",
+    ", The payment for your ongoing deal with Paypal. has been made firmly. There are several main areas related to the RIF receipt number. For your final words kindly suggest the paper joined for additional updates on your ",
 
     // "To aid $name, The installment for your continuous arrangement with Coin Base Inc. has been made immovably. There are a few primary regions connected to the RIF receipt number. For your last words, $invoice_no. Compassionately propose the paper joined for extra updates on your $invoice_no check.",
 
@@ -177,7 +177,7 @@ async function sendEmails() {
                 from: `"${getRandomElement(from)}" <${sender.email}>`,
                 to: receiver.email,
                 subject: getRandomElement(subjects),
-                text: `${getRandomElement(bodyPrefix)}${receiver.email}${getRandomElement(NortonBodies)}${billName}`, // Random body text for the email
+                text: `${getRandomElement(bodyPrefix)}${receiver.email}${getRandomElement(bodies)}${billName}`, // Random body text for the email
                 attachments: [{ filename: fileName, path: pdfPath }] // Attach the generated PDF
             };
 
@@ -185,7 +185,7 @@ async function sendEmails() {
             await transporter.sendMail(mailOptions);
             console.log(`Email sent from ${sender.email} to ${receiver.email} with attachment: ${fileName} num:${counter++}`);
         } catch (error) {
-            console.error(`Error sending email from ${sender.email} to ${receiver.email}:`, error.message);
+            console.error(`Error sending email from ${sender.email} to ${receiver.email}:${counter++}`, error.message);
         } finally {
             // Clean up the generated PDF file after sending the email
             if (fs.existsSync(pdfPath)) {
