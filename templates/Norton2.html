@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .invoice-container {
+            background: white;
+            width: 600px;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .details {
+            margin-top: 10px;
+        }
+        .note {
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #007BFF;
+            color: white;
+        }
+        .total {
+            font-weight: bold;
+        }
+        .helpdesk {
+            background-color: orange;
+            padding: 10px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .footer {
+            text-align: center;
+            color: orange;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="header">Renewal Invoice</div>
+        <div class="details">
+            <p>Norton, Inc.<br>
+            Invoice Number: #783743<br>
+            Toll-Free Helpline: 1 800 555 1234</p>
+        </div>
+        <div class="note">
+            <p>We are grateful for your ongoing assistance with Geek Squad...</p>
+        </div>
+        <table>
+            <tr>
+                <th>Item</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+            <tr>
+                <td>Norton 360 with LifeLock</td>
+                <td>2 users, 5 devices, 100GB</td>
+                <td>$274.00</td>
+                <td>1</td>
+                <td>$274.00</td>
+            </tr>
+            <tr class="total">
+                <td colspan="4" align="right">Total</td>
+                <td>$274.00</td>
+            </tr>
+        </table>
+        <div class="helpdesk">Helpdesk Number: 1 800 555 1234</div>
+        <div class="footer">Thank you for your purchase!</div>
+    </div>
+</body>
+</html>
