@@ -3,192 +3,143 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Summary</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
-    .email-container {
-      max-width: 600px;
+      background-color: lightgray;
+      font-family: monospace;
+      width: 90%;
       margin: 0 auto;
-      background-color: #fff;
       padding: 20px;
+    }
+    .container {
+      background-color: rgb(248, 248, 248);
+      font-size: 16px;
       border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      box-sizing: border-box;
+      width: 90%;
+      padding: 0.5cm;
+      margin: auto;
     }
-    .header {  
-      margin: 20px 10px;
-      padding: 10px;
-      flex: auto;
-      display: inline;
-    }
-    .footer {
-      border-radius: 0 0 8px 8px;
-    }
-    .img{
-        width: 50%;
-        float: left;
-        padding: 20px 0 0 0;
-    }
-    .imp{
-        overflow: hidden;
-        padding-left: 100px;
-        font-size: small;
-        line-height: 20%;
-        font-size: small;
-    }
-    .content {
-      padding: 2px;
-    }
-    .table-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
-    th, td {
-      padding: 10px;
-      text-align: left;
-      border-bottom: 1px solid #ddd;
-    }
-    th {
-      background-color: #007bff;
+    .table-header {
+      background-color: rgb(70, 143, 240);
       color: white;
-    }
-    .total-row td {
+      height: 1cm;
+      text-align: center;
       font-weight: bold;
     }
-    .address {
-        font-size: small;
-        font-weight: 200;
-        padding: 4px;
-        line-height: 50%;
-      margin: 10px;
-      max-width: 300px;
-      font-family: Arial, sans-serif;
+    .table-subheader {
+      background-color: rgb(196, 196, 196);
+      color: rgb(0, 0, 0);
+      height: 0.8cm;
+      text-align: center;
     }
-    .bold{
-        font-weight: 600;
+    .order-details, .order-summary, .footer {
+      margin: 20px 0;
     }
-    .note{
-        padding: 4px;
-        margin: 10px;
-        font-size: small;
+    .order-details tr, .order-summary tr, .footer tr {
+      background-color: lightgray;
+      width: 100%;
     }
-    .ci{
-        width: 5%;
+    .order-details td, .order-summary td, .footer td {
+      padding: 0.5cm;
     }
-    .cta{
-        padding: 1px;
-        margin-bottom: 30px;
-        text-align: center;
-        background-color: #FFBB70;
+    .shipping-address, .shipped-by {
+      background-color: lightyellow;
+      height: 1cm;
+      padding: 0.5cm;
     }
-    .thanks{
-        margin: 10px;
-        padding: 10px;
-        color: #FF8A08;
-        text-align: center;
+    .shipping-address {
+      width: 60%;
+    }
+    .shipped-by {
+      color: steelblue;
+    }
+    .item {
+      background-color: rgb(253, 237, 237);
+      height: 1.5cm;
+      padding: 0.5cm;
+    }
+    .total {
+      font-size: 15px;
+      font-weight: bold;
+      text-align: right;
     }
   </style>
 </head>
 <body>
-  <div class="email-container">
-    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAI4AlAMBIgACEQEDEQH/xAAcAAEAAgIDAQAAAAAAAAAAAAAABQcDBgIECAH/xABBEAABAwMBAgsFBQYGAwAAAAABAAIDBAURBhIhBxMUFTFRUlSRktFBYXGBoTJCscHCFiJVcpSyNFNik+HwIyVE/8QAGgEBAAIDAQAAAAAAAAAAAAAAAAQFAQIDBv/EACYRAAICAgEEAgEFAAAAAAAAAAABAgMEERIFITFBE1GBIjJhcaH/2gAMAwEAAhEDEQA/ALr5JTd3i8gTklN3eLyBZkQGHklN3eLyBOSU3d4vIFmRAYeSU3d4vIE5JTd3i8gWZEBh5JTd3i8gTklN3eLyBZkQGHklN3eLyBOSU3d4vIFmRAYeSU3d4vIE5JTd3i8gWZEBh5JTd3i8gTklN3eLyBZkQGHklN3eLyBOSU3d4vIFmRAYeSU3d4vIE5JTd3i8gWZEBh5JTd3i8gRZkQBERAEREAREQEdqKvda7Bca+MtElPTSSM2ujaDTj64Xm2TVupJHue6/3QFxydmre0fIA4CvHhdqhTaDr25w6d0cTff++CfoCvOit+n1pwcmvZBypPkkiY/arUf8fuv9bJ6p+1Wo/wCP3X+tk9VDop/CP0RuUvsmmat1IxwcL/cyR2qt5H1K2WxcLOoLfK0XF0dxp9wLZGhjwPc5o/EFaAi1lTXJacTKsmvDPVWnb7Q6itcdwtshdE/c5rtzo3Dpa4ewqTVHcBVxlh1DV28vPEVNOX7P+tpGD4FyvFUWTV8VjivBZVT5x2ERFwOgREQBERAEREAREQBERAVfw9VYZY7bRe2apMvyY3H6wqSVocPVWX3y20ef3YaUyj4vcQf7AqvV/hR1QisyHuxnCZxDRj2rDtO7R8VznO8BY11k+4iux92ndo+Kbbu0V8Ra7NtI3Xgqu3NGpHVssJmibAWOwcFu0RvHv3FejaWoiq6aOop3h8UjQ5rh7QvOOmKJ1LQcZIMSTHaI6h7PX5q6ODaZ8mn3se4kRVDmsHUMNP4kqJn0L41b7I+HmuWVKlft9fjybWiIqguQiIgCIiAIiIAiIgCIiA86cLlVynXlwAdtNhbHE33YYCR4krTVKaoqxXakulUw5ZNVyuaf9JccfTCi16WqPGuK/gqJvcmzBN9srgt4oLPRNpIuNp2Pkc0Oc5wzvK7LbZQN6KOD5xgrf4m+5BfVK4vSTNAjjfK8MiY57j0NaMkrYrNp1+22e4NwBvbF1/H0WyxQxQt2YY2MHU1oC5raNSXki39TnNcYLQVq8HlK6n04x7v/AKJXS46hub+lV1Y7VPeLhHSQAgE5kfjIY32kq56eCOmp4oIW7McTAxg6gBgKv6nauKrXkl9Ex25u5+PCMiIipT0gREQBERAEREAREQBdW61YoLXWVpGRTwPlx/K0n8l2lrHCZVOo9C3eVnS6ERfJ7gw/RxW9ceU1H7NZPUWzzUTk5K5RM4yVjB95wC4Lu2aPjLnTtxnD9rw3/kvTFNOXGLl9G6gAAAdAX1rXPcGsBLnHAA6SV8UppeB1RqG3xtGcTtefg07R+gXScuMXL6PN1w5zUftktFoK8va0uNLGSN4dIcjwBUhQcHcpcDca5jWg72wAkkfE4x4FWCioJdRvfvR6uHSMWL203+TpWu10dpphBQwiNv3j0ucesn2ruoihSk5PbLKMYxXGK0giIsGwREQBERAEREAREQBYaylp66mkpqyCOeCQYfHI0Oa74grMiAgf2M0z/Arf/sNWua6sNltNpilt1ro6ad84bxkcQDtnZcTv+QVgrr1tFS10QirII5owdoNe3OD1qRTfKFilJtpEfJo+WqUI9myjFs/B3T8dqRkn+RE9/wCn9S3/APZuy/w2n8i7dDbqK3hwoqWKDb+0WNAJ+Kn3dRhOtxin3KfG6POq6M5SWl3O0iIqg9AEREAREQBERAEREAREQGicMN7rLNpuA26pkp6ieqazbjdh2yGuJ3/HCrW1z8Il2t7rhbay61FMxxaXsqN+R04bnJ+QWxcPtXmos9GD9lkkrh8S0D8CozSvCXBprSkVrpra+WrZtnjXSAM2nOJBxjO4Y3e5W1EJLHThFNtkKySdrUnpGfg64Qr07UNJbLtVOrKaqkEQMoG3G49BB6TvxuKu9eb9A0zo7nJqSuY/m61AzyyY+3J9xgPaLiFK0961zr26TC01U9PFHvLKeYwxwtPQC4byfErGTjRnPcdJLyZqucY6fdl9ovPGob5rjTszLTdLpVxyMHGMeJdovad2dvpI3Hp962rVdbqKj4OtPXenutYyYtHKXteQXiQbTS4+7AHzUZ4bXH9S7nVXp77eC3UWg8Hur2z6FmuN7qy59ve9k8rzlzh0t+JOQB1kLTtNXrVOt9Xv5NcqqjoA/jZWwvw2GIHc0e89HiVosWW5belEy7l217Nr17e6+mvYpqKsmhZHC3abG7GXHJz4YUbVzatt9O2rqZ61kJxh5l2hv6M7zj5rp6snbPqeukdva2bYOOpuG/kpXUusm3a2mhpqQwseQXue7JwDkAD4gK3hW4wrUYJ/Z5m26M7LpTsaaf6UvZsOhNQVV3jqKeuIfNCA5sgGC4HrA6vzW2KrrRVzaYsslaYsVdeQ2na8fZY3peR8SMLnQ0+rrvCa+CsqQwnLcz7Af8G9H5KHdiRlOU01GJY43UJQqjXKLlPW3/Xrf4LOWg8IV4raO509PRVUsIEO27i3YyST0+Ch6K+X2qvlNTTV07HunZE9gOyBggHI/FfdXE3DWb6cbwZI4R4D8yVtj4nxXLnp9mznl9Q+fHfxprukWZbOM5tpOPeXy8SzbcelztkZK7KDcMDoRVTe3svorSSCIiwZCIiA8/8ADVV8o1s+LP8AhqaOPHVnL/1K1rNobTsFsom1Fmo5J2QMEj5Iw4udgZJz71JV2lrDcK51dXWqlnqXkF0kjMk4AAz8gFMKXZk7rjCHbRxhVqTk/ZpPClbC7QFXT2ynbHHAWSGGFgaAxrt+AOrp+Srzgv11bdLUdZR3OCctmkErJYWhx6MYIJHV9Sr4IBBBGQVrz9C6WkquUuslJxmc4DSG5/lzs/RKr4Kt12LaMTrk5qUWUZr/AFOdXX5tTBTvigjjEMEbvtEZJyfeSVfF6sLK/R01jAH+EEUfUHNA2T4gLJNpTT89Y2sltFI6obs4fxY3bIAbu6NwA8FF8JN0u1BYjT2GgrKmsq8x8ZTQufxDfa790bjvwPmfYtp3K1whWtaMRg4cpS77PPtGbhMDZ6TjXcqmZmnb9+QZDf7j/wBC9GaG0zBpSwspRsuqX/8AkqpR95/oOgf8rT+CHRM1vLr5eaZ8VWcspoZmFrox0FxB3gnoHuz1q0nNDmlrgCCMEH2rfNyFJ8I+PZrj1NLk/JUGn4GXfVMLahm3HNM+R7Xe0YLt6s+Cw2mCQSRW6ma8dB4sHC5UdltlDOJ6SihilAID2t3hd9c8rKdslw2lo4YOAqIP5NNt72V5woQSiroqjB4kxlmfYHZz+B+i7Fr1zQUdlp4H005qIIhGGNA2XEDAOc/kt2qqaCrhdDVQslid0te3IXQpNPWijl4ynoIWv7RBdj4Z6FvHJqdKrsi3o0nh3xyJW0yS5edleaR27lrGKplALnSSTvx14J/EhcrP/wCy162XpDqp8o+DckfgFY9FZ7dQTGajo4oZCNnaa3fhKSz22jn4+looYpd422t3710nnQbk0vK0jhX0uxRgpSXaXJ/4d5ERVhdhERAEUbz1TdiXwHqnPVN2JfAeqAkkUbz1TdiXwHqnPVN2JfAeqAkkUbz1TdiXwHqnPVN2JfAeqAkkUbz1TdiXwHqnPVN2JfAeqAkkUbz1TdiXwHqnPVN2JfAeqAkkUbz1TdiXwHqnPVN2JfAeqAkkUbz1TdiXwHqnPVN2JfAeqAkkUbz1TdiXwHqnPVN2JfAeqAkkUbz1TdiXwHqnPVN2JfAeqAkkUbz1TdiXwHqviA//2Q==" alt="company logo">
-    <div class="flex">
-      <div class="header">
-          <p class="bold">Purchase Invoice</p>
-          <p>4601 Penn Avenue</p>
-          <p>Bill Date: Feb 11, 2025</p>
-          <p class="bold">HelpDesk Number:  </p>
-          <p class="bold" id="helpdeskNum">############</p>
-      </div>
-      <div class="address">
-        <p>Paypal, Inc.</p>
-        <p>Invoice Number: <p id="invoiceNum">##########</p></p>
-        <p>Toll-Free Helpline: <p id="tollFreeNum">############</p></p>
-    </div>
-    </div>
+  <div class="container">
+    <p>Dear Customer,</p>
+    <p>Thank you for shopping with Amazon. We really try our best to deliver your purchase soon. Once your package is shipped we will send an email with a link to track your order.</p>
     
-    <div class="content">
-        
-        <div class="note">
-            <p class="bold">Note*: </p>
-        <p>We are grateful for your ongoing assistance with Paypal. Due to Paypal's excellent reputation in the business, we will not be charging our customers for this purchase out of courtesy.</p>
-        <p>If this transaction will reflect on your bank statement within 24 to 48 hours, please call ########## , if you have any issue with this transaction,</p>
-        </div>
-        
-        <div class="table-container">
-            <table>
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Description</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Iphone 15 128GB - Black</td>
-                  <td>$799.00</td>
-                  <td>1</td>
-                  <td>$799.00</td>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th>Price</th>
-                  </tr>
-                  <tr>
-                    <td>Payment Method: Auto-debit</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Total: $799.00</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>Balance Due: $0.00</td>
-                  </tr>
-                <tr class="total-row">
-                  <td colspan="4">Total</td>
-                  <td>$799.00</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="note">
-            <p>This purchase is carried out by Paypal, up to 24 hours before the end of the purchase period, unless you report this purchase to Help Desk.</p>
-                <p>Please use our Helpdesk Number to revert this if not purchased by yourself.</p>
-        </div>
-        <div class="cta">
-            <h2>Helpdesk Number: <p id="helpdeskNum">############</p></h2>
-        </div>
-        <hr>
-        <div class="thanks">
-            <h1>Thank you for your purchase!</h1>
-        </div>
-    </div>
-    <footer>
-      <p>&copy; 2025 Paypal, Inc. All rights reserved.</p>
-    </footer>
+    <table class="order-details">
+      <tr>
+        <td>Order Number:</td>
+        <td align="right">##########</td>
+      </tr>
+      <tr>
+        <td>Order Placed on:</td>
+        <td align="right">30th May 2022</td>
+      </tr>
+      <tr>
+        <td>Total Amount Paid:</td>
+        <td align="right">$659.99</td>
+      </tr>
+      <tr>
+        <td>Shipping Method:</td>
+        <td align="right">Standard</td>
+      </tr>
+    </table>
+
+    <table>
+      <tr>
+        <td class="shipping-address">
+          <b>Shipping Address:</b><br>
+          Mark Roger<br>
+          Santa Cruz Ave.<br>
+          California (USA) - 70097
+        </td>
+        <td class="shipped-by">
+          Shipped By:<br>
+          <span>Air Dec<br> Standard Method</span>
+        </td>
+      </tr>
+    </table>
+
+    <p>If you have any queries about your order, please contact us at <b>############</b>.</p>
+
+    <table>
+      <tr class="table-header">
+        <td colspan="3">ORDER SUMMARY</td>
+      </tr>
+      <tr class="table-subheader">
+        <td>Description</td>
+        <td>Qty</td>
+        <td align="center">Amount</td>
+      </tr>
+      <tr class="item">
+        <td>Apple iPhone 12_64GB</td>
+        <td>1</td>
+        <td align="right">$659.99</td>
+      </tr>
+      <tr>
+        <td align="right" colspan="2">Subtotal</td>
+        <td align="right">$659.99</td>
+      </tr>
+      <tr>
+        <td align="right" colspan="2">Shipping Cost</td>
+        <td align="right">$0.00</td>
+      </tr>
+      <tr>
+        <td align="right" colspan="2">Sale Tax</td>
+        <td align="right">$0.00</td>
+      </tr>
+      <tr class="total">
+        <td align="right" colspan="2">Total</td>
+        <td align="right">$659.99</td>
+      </tr>
+    </table>
+
+    <p><i>Thanks & Regards,<br>Billing Team</i></p>
+  </div>
 </body>
-<script src="../yamraaj.js"></script>
 </html>

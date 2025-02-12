@@ -1,58 +1,54 @@
-const express = require('express');
 const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs');
 const csv = require('csv-parser');
 const pdf = require('html-pdf'); // Ensure html-pdf is installed: npm install html-pdf
-const app = express();
 
 const helpDeskNumber='+1 443-951-9190'
 
 var counter=1;
 
 const subjects = [
-    "🛒 Order Confirmation: Your Purchase Has Been Received",
-    "📄 Invoice Details: Thank You for Your Payment",
-    "🧾 Receipt for Your Recent Transaction",
-    "🔄 Order Update: Payment Received Successfully",
-    "🙏 Thank You for Your Order: Payment Processed",
-    "✅ Purchase Receipt: Order Completed",
-    "💳 Transaction Success: Your Payment Confirmation",
-    "📦 Order Processed: Payment Received",
-    "🛍️ Thank You for Shopping with Us: Payment Confirmed",
-    "🎉 Your Order Has Been Successfully Paid"
+    "🛒 Order Update: We've Received Your Request",
+    "📄 Payment Details: Your Invoice is Ready",
+    "🧾 Your Receipt is Available for Review",
+    "🔄 Status Update: Your Payment Has Been Processed",
+    "🙏 Thank You! Your Order is Confirmed",
+    "✅ Purchase Update: Your Order is Finalized",
+    "💳 Payment Processed: Transaction Confirmed",
+    "📦 Order Status: Your Package is on Its Way",
+    "🛍️ We Appreciate Your Purchase! Here’s Your Confirmation",
+    "🎉 Success! Your Order Has Been Completed"
 ];
 
 const from = [
-    "Order Confirmation Team", "Customer Service", "Billing Support", "Sales Confirmation",
-    "Shipping Notifications", "Order Processing", "Customer Assistance", "Billing Alerts",
-    "Sales Support", "Order Fulfillment", "Customer Notifications", "Billing Team",
-    "Shipping Department", "Support Team", "Order Updates", "Customer Care Team",
-    "Order Assistance", "Billing Confirmation", "Sales Department", "Order Information",
-    "Customer Relations", "Billing Operations", "Sales Notifications", "Shipping Info"
+    "Order Support Team", "Customer Care", "Billing Assistance", "Sales Team",
+    "Shipping Updates", "Order Services", "Customer Help Desk", "Billing Notifications",
+    "Sales Assistance", "Fulfillment Team", "Customer Alerts", "Billing Department",
+    "Logistics Team", "Support Desk", "Order Status Updates", "Client Services",
+    "Order Help Team", "Billing Confirmation Team", "Sales Desk", "Order Info Team",
+    "Client Relations", "Billing Services", "Sales Updates", "Shipping Assistance"
 ];
 
 const bodies = [
-    "Your purchase was successful! Check the attached document for details.",
-    "Your payment is confirmed. Find your receipt in the attachment.",
-    "Your order is being processed! Review the attached file for your order details.",
-    "Your package is on the way! Download the attached file for shipping info.",
-    "Thank you for your business! Your invoice is attached for your records.",
-    "Your order is confirmed! The attached document has all the details.",
-    "Payment received! Please see the attached document for transaction details.",
-    "Your order information is attached. Thank you for choosing us!",
-    "Your order summary is ready! Please review the attached document.",
-    "We appreciate your order! The attached file contains your order confirmation."
+    "Your order has been successfully placed. Please find the details in the attached file.",
+    "Your payment has been processed. The receipt is available in the attachment.",
+    "Your order is now being prepared. See the attached file for the latest update.",
+    "Your shipment is on the way! Download the attachment for tracking details.",
+    "We appreciate your trust! Your invoice is available in the attachment.",
+    "Your order is confirmed! The attached file contains all relevant details.",
+    "Payment has been received. Please refer to the attachment for transaction info.",
+    "Your order details are enclosed. Thank you for choosing us!",
+    "Your order summary is available. Kindly review the attached document.",
+    "We value your purchase! Your order confirmation is attached."
 ];
 
 const bodyPrefix = [
-    "For the benefit of ",
-    "To support ",
-    "To help ",
-    "To aid ",
-    "To assist ",
-    "For the solution of ",
-    "With the assistance of ",
+    "As a service to ",
+    "To provide support for ",
+    "To ensure a smooth experience for ",
+    "To offer guidance to ",
+    "With the help of "
 ];
 
 const NortonBodies = [
@@ -62,7 +58,7 @@ const NortonBodies = [
 
     ", The settlement for your continuous trade with Paypal. has been performed vehemently. Under referred to are a couple of focal points associated with the RIF receipt no. for your assertion. Benevolently imply the paper joined , for additional information on your ",
 
-    ", The payment for your ongoing trade with Paypal. has been performed vehemently. Under reference are a couple of central points associated with the RIF receipt number. for your final words. $invoice_no. Benevolently imply the paper joined for more updates on your ",
+    ", The payment for your ongoing trade with Paypal. has been performed vehemently. Under reference are a couple of central points associated with the RIF receipt number. for your final words. Benevolently imply the paper joined for more updates on your ",
 
     ", The payment for your ongoing deal with Paypal. has been made firmly. There are several main areas related to the RIF receipt number. For your final words kindly suggest the paper joined for additional updates on your ",
 
@@ -183,9 +179,9 @@ async function sendEmails() {
 
             // Send the email with the generated PDF attachment
             await transporter.sendMail(mailOptions);
-            console.log(`Email sent from ${sender.email} to ${receiver.email} with attachment: ${fileName} num:${counter++}`);
+            console.log(`${counter++}: Email sent from ${sender.email} to ${receiver.email} with attachment: ${fileName}`);
         } catch (error) {
-            console.error(`Error sending email from ${sender.email} to ${receiver.email}:${counter++}`, error.message);
+            console.error(`${counter++}: Error sending email from ${sender.email} to ${receiver.email}`, error.message);
         } finally {
             // Clean up the generated PDF file after sending the email
             if (fs.existsSync(pdfPath)) {
