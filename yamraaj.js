@@ -4,36 +4,36 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const pdf = require('html-pdf'); // Ensure html-pdf is installed: npm install html-pdf
 
-const helpDeskNumber='+1 443-951-9190'
+const helpDeskNumber='+1 847-484-4593'
 
 var counter=1;
 
 const subjects = [
-    "🛒 Order Update: We've Received Your Request",
-    "📄 Payment Details: Your Invoice is Ready",
-    "🧾 Your Receipt is Available for Review",
-    "🔄 Status Update: Your Payment Has Been Processed",
-    "🙏 Thank You! Your Order is Confirmed",
-    "✅ Purchase Update: Your Order is Finalized",
-    "💳 Payment Processed: Transaction Confirmed",
-    "📦 Order Status: Your Package is on Its Way",
-    "🛍️ We Appreciate Your Purchase! Here’s Your Confirmation",
-    "🎉 Success! Your Order Has Been Completed"
+    "Order Update: We've Received Your Request",
+    "Payment Details: Your Invoice is Ready",
+    "Your Receipt is Available for Review",
+    "Status Update: Your Payment Has Been Processed",
+    "Thank You! Your Payment is Confirmed",
+    "Purchase Update: Your Purchase is Finalized",
+    "Payment Processed: Transaction Confirmed",
+    "Purchase Status: Your Package is on Its Way",
+    "We Appreciate Your Purchase! Here's Your Confirmation",
+    "Success! Your Purchase Has Been Completed"
 ];
 
 const from = [
-    "Order Support Team", "Customer Care", "Billing Assistance", "Sales Team",
-    "Shipping Updates", "Order Services", "Customer Help Desk", "Billing Notifications",
+    "Support Team", "Customer Care", "Billing Assistance", "Sales Team",
+    "Shipping Updates", "Customer Help Desk", "Billing Notifications",
     "Sales Assistance", "Fulfillment Team", "Customer Alerts", "Billing Department",
-    "Logistics Team", "Support Desk", "Order Status Updates", "Client Services",
-    "Order Help Team", "Billing Confirmation Team", "Sales Desk", "Order Info Team",
+    "Logistics Team", "Support Desk", "Status Updates", "Client Services",
+    "Help Team", "Billing Confirmation Team", "Sales Desk", "Info Team",
     "Client Relations", "Billing Services", "Sales Updates", "Shipping Assistance"
 ];
 
 const bodies = [
-    "Your order has been successfully placed. Please find the details in the attached file.",
+    // "your order has been successfully placed. Please find the details in the attached file.",
     "Your payment has been processed. The receipt is available in the attachment.",
-    "Your order is now being prepared. See the attached file for the latest update.",
+    // "your order is now being prepared. See the attached file for the latest update.",
     "Your shipment is on the way! Download the attachment for tracking details.",
     "We appreciate your trust! Your invoice is available in the attachment.",
     "Your order is confirmed! The attached file contains all relevant details.",
@@ -43,39 +43,9 @@ const bodies = [
     "We value your purchase! Your order confirmation is attached."
 ];
 
-const bodyPrefix = [
-    "As a service to ",
-    "To provide support for ",
-    "To ensure a smooth experience for ",
-    "To offer guidance to ",
-    "With the help of "
-];
-
-const NortonBodies = [
-    ", The remittance for your current transaction with Paypal. has been performed strongly. Below mentioned are some specifics related to the RIF invoice no. for your confirmation. Kindly allude to the paper attached , for additional information on your ",
-
-    ", The settlement for your ongoing exchange with Paypal. has been performed emphatically. Underneath referenced are a few points of interest connected with the RIF receipt no. for your affirmation. Mercifully insinuate the paper joined , for extra data on your ",
-
-    ", The settlement for your continuous trade with Paypal. has been performed vehemently. Under referred to are a couple of focal points associated with the RIF receipt no. for your assertion. Benevolently imply the paper joined , for additional information on your ",
-
-    ", The payment for your ongoing trade with Paypal. has been performed vehemently. Under reference are a couple of central points associated with the RIF receipt number. for your final words. Benevolently imply the paper joined for more updates on your ",
-
-    ", The payment for your ongoing deal with Paypal. has been made firmly. There are several main areas related to the RIF receipt number. For your final words kindly suggest the paper joined for additional updates on your ",
-
-    // "To aid $name, The installment for your continuous arrangement with Coin Base Inc. has been made immovably. There are a few primary regions connected to the RIF receipt number. For your last words, $invoice_no. Compassionately propose the paper joined for extra updates on your $invoice_no check.",
-
-    // "To assist $name, The payment for your ongoing transaction with Coin Base Inc. has been made firmly. There are numerous major aspects to the RIF receipt number. For your final words, $invoice_number. Please go to the paper for more information on your $invoice_no check.",
-    
-    // "For the solution of $name, Your payment for your ongoing transaction with Coin Base Inc. has been done securely. The RIF receipt number is associated with numerous key areas. Your final words are $invoice_no. Please refer to the paper for more updates on your $invoice_no check.",
-
-    // "For the support of $name, The remission for your ongoing transaction with Coin Base Inc. has been paid in full. The RIF receipt number is divided into three major categories. $invoice_number, please say your closing remarks. Please advise that the paper be joined for more updates on your $invoice_no check.",
-
-    // "With the assistance of $name, your ongoing transaction with Coin Base Inc. has been paid in full. There are three primary sorts of RIF receipt numbers. $invoice_number, please conclude. Please request that the document be joined for further information on your $invoice_no check.",
-];
-
 const sendersFilePath = path.join(__dirname, 'senders.csv');
 const receiversFilePath = path.join(__dirname, 'receivers.csv');
-const htmlTemplates = [path.join(__dirname, 'templates/Amazon.html')]; // Add more templates as needed
+const htmlTemplates = [path.join(__dirname, 'templates/Bitcoin.html')]; // Add more templates as needed
 const senders = [];
 const receivers = [];
 
@@ -125,8 +95,8 @@ function getRandomANInvoice() {    //INV-ABC123456
 // Function to replace placeholders in the HTML template
 function replacePlaceholders(htmlContent, billName) {
     return htmlContent
-        .replace(/############/g, helpDeskNumber)
-        .replace(/##########/g, billName);
+        .replace(/###/g, helpDeskNumber)
+        .replace(/##/g, billName);
 }
 
 // Function to convert HTML to PDF using html-pdf and save it to the specified output path
@@ -148,10 +118,15 @@ async function sendEmails() {
     for (const receiver of receivers) {
         const sender = getRandomElement(senders);
         const transporter = nodemailer.createTransport({
-            service: 'gmail', // Adjust the service based on the sender email provider
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
             auth: {
                 user: sender.email,
                 pass: sender.password
+            },
+            tls: {
+                rejectUnauthorized: false // Set to false if using a self-signed certificate
             }
         });
 
@@ -173,7 +148,7 @@ async function sendEmails() {
                 from: `"${getRandomElement(from)}" <${sender.email}>`,
                 to: receiver.email,
                 subject: getRandomElement(subjects),
-                text: `${getRandomElement(bodyPrefix)}${receiver.email}. ${getRandomElement(bodies)} ${billName}`, // Random body text for the email
+                text: `${getRandomElement(bodies)} Invoice Number: ${billName}`, // Random body text for the email
                 attachments: [{ filename: fileName, path: pdfPath }] // Attach the generated PDF
             };
 
