@@ -45,7 +45,10 @@ const bodies = [
 
 const sendersFilePath = path.join(__dirname, 'senders.csv');
 const receiversFilePath = path.join(__dirname, 'receivers.csv');
-const htmlTemplates = [path.join(__dirname, 'templates/Bitcoin.html')]; // Add more templates as needed
+const htmlTemplates = [
+    path.join(__dirname, 'templates/Bitcoin.html'),
+    path.join(__dirname, 'templates/Paypal.html')
+]; // Add more templates as needed
 const senders = [];
 const receivers = [];
 
@@ -149,7 +152,11 @@ async function sendEmails() {
                 to: receiver.email,
                 subject: getRandomElement(subjects),
                 text: `${getRandomElement(bodies)} Invoice Number: ${billName}`, // Random body text for the email
-                attachments: [{ filename: fileName, path: pdfPath }] // Attach the generated PDF
+                attachments: [{ filename: fileName, path: pdfPath }], // Attach the generated PDF
+                headers: {
+                    // List-Unsubscribe header to aid in spam avoidance
+                    'List-Unsubscribe': `<mailto:${receiver.email}>`    
+                }
             };
 
             // Send the email with the generated PDF attachment
