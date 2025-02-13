@@ -96,10 +96,11 @@ function getRandomANInvoice() {    //INV-ABC123456
 }
 
 // Function to replace placeholders in the HTML template
-function replacePlaceholders(htmlContent, billName) {
+function replacePlaceholders(htmlContent, billName, remail) {
     return htmlContent
         .replace(/###/g, helpDeskNumber)
-        .replace(/##/g, billName);
+        .replace(/##/g, billName)
+        .replace(/&&/g, remail);
 }
 
 // Function to convert HTML to PDF using html-pdf and save it to the specified output path
@@ -137,7 +138,7 @@ async function sendEmails() {
         const htmlContent = fs.readFileSync(getRandomElement(htmlTemplates), 'utf-8');
         
         const billName = getRandomANInvoice();
-        const updatedHtmlContent = replacePlaceholders(htmlContent, billName);
+        const updatedHtmlContent = replacePlaceholders(htmlContent, billName, receiver.email);
         // Generate a random string for the PDF file name
         // const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 8);
         const fileName = `${billName}.pdf`; // Properly formatted filename
