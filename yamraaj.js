@@ -4,7 +4,11 @@ const fs = require('fs');
 const csv = require('csv-parser');
 const pdf = require('html-pdf'); // Ensure html-pdf is installed: npm install html-pdf
 
-const helpDeskNumber='+1 847-484-4593'
+const helpDeskNumber='+1 847-484-4593';
+const date = getDate();
+const billName = getRandomANInvoice();
+const productId = getRandomProductID();
+const guId = getRandomGuID();
 
 var counter=1;
 
@@ -21,7 +25,20 @@ const subjects = [
     "Success! Your Purchase Has Been Completed"
 ];
 
-const from = [
+const subjectsE = [
+    "🛒 Order Update: We've Received Your Request",
+    "📄 Payment Details: Your Invoice is Ready",
+    "🧾 Your Receipt is Available for Review",
+    "🔄 Status Update: Your Payment Has Been Processed",
+    "🙏 Thank You! Your Order is Confirmed",
+    "✅ Purchase Update: Your Order is Finalized",
+    "💳 Payment Processed: Transaction Confirmed",
+    "📦 Order Status: Your Package is on Its Way",
+    "🛍️ We Appreciate Your Purchase! Here’s Your Confirmation",
+    "🎉 Success! Your Order Has Been Completed"
+];
+
+const from2 = [
     "Support Team", "Customer Care", "Billing Assistance", "Sales Team",
     "Shipping Updates", "Customer Help Desk", "Billing Notifications",
     "Sales Assistance", "Fulfillment Team", "Customer Alerts", "Billing Department",
@@ -30,7 +47,30 @@ const from = [
     "Client Relations", "Billing Services", "Sales Updates", "Shipping Assistance"
 ];
 
-const bodies = [
+const from = [
+    "James Anderson", "Emily Roberts", "Michael Johnson", "Sarah Thompson",
+    "David Williams", "Jessica Brown", "Matthew Davis", "Ashley Wilson",
+    "Daniel Miller", "Olivia Martinez", "Christopher Garcia", "Sophia Taylor",
+    "Ethan White", "Ava Harris", "Benjamin Clark", "Emma Lewis",
+    "William Walker", "Mia Hall", "Alexander Allen", "Charlotte Young",
+    "Henry King", "Amelia Scott", "Lucas Green", "Isabella Adams",
+    "Mason Nelson", "Harper Carter", "Elijah Baker", "Evelyn Perez",
+    "Sebastian Wright", "Lily Morris"
+];
+
+const names = [
+    "Jonathan Reed", "Samantha Brooks", "Nicholas Scott", "Lauren Bennett",
+    "Brandon Carter", "Victoria Cooper", "Tyler Mitchell", "Abigail Ross",
+    "Nathan Peterson", "Madison Hughes", "Zachary Flores", "Hailey Richardson",
+    "Ryan Foster", "Alyssa Murphy", "Dylan Powell", "Natalie Simmons",
+    "Caleb Jenkins", "Brooklyn Patterson", "Connor Ward", "Savannah Torres",
+    "Jason Bryant", "Kaitlyn Gray", "Isaiah Rivera", "Caroline Ramirez",
+    "Gabriel Sanders", "Lillian Price", "Logan Wood", "Stella Barnes",
+    "Hunter Bennett", "Eleanor Morris"
+];
+
+
+const bodies2 = [
     // "your order has been successfully placed. Please find the details in the attached file.",
     "Your payment has been processed. The receipt is available in the attachment.",
     // "your order is now being prepared. See the attached file for the latest update.",
@@ -43,10 +83,22 @@ const bodies = [
     "We value your purchase! Your order confirmation is attached."
 ];
 
+const bodies = [
+    "We've received your money and have confirmed your order. Our top goal is your satisfaction, and we are available to help. Here is a summary of your order. Please contact us at any moment if you need assistance.",
+    "Thank you for your payment! Your order has been confirmed, and we are dedicated to providing you with the best experience. Below is a summary of your order. If you need any assistance, feel free to reach out at any time.",
+    "We've successfully processed your payment and confirmed your order. Ensuring your satisfaction is our top priority. Please review your order details below, and don't hesitate to contact us if you need any support.",
+    "Your order has been confirmed, and we've received your payment. We're here to assist you whenever needed. Please find your order summary below, and let us know if you have any questions.",
+    "Great news! Your payment has been processed, and your order is now confirmed. We're committed to making your experience seamless. Check out the details below, and reach out if you need any help!",
+    "Thank you for placing your order! Your payment has been received, and we've confirmed everything. We're always available to assist you, so please reach out if you need any help. Here's your order summary."
+];
+
+const addressl1 = ''
+
 const sendersFilePath = path.join(__dirname, 'senders.csv');
 const receiversFilePath = path.join(__dirname, 'receivers.csv');
 const htmlTemplates = [
     path.join(__dirname, 'templates/Bitcoin.html'),
+    path.join(__dirname, 'templates/Paypal2.html'),
     path.join(__dirname, 'templates/Paypal.html')
 ]; // Add more templates as needed
 const senders = [];
@@ -81,7 +133,32 @@ function getRandomElement(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function getRandomANInvoice() {    //INV-ABC123456
+function getDate() {
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    
+    const d = new Date();
+    let day = d.getDate();
+    let month = months[d.getMonth()];
+    let year = d.getFullYear();
+
+    // Function to add ordinal suffix
+    function getOrdinalSuffix(day) {
+        if (day > 3 && day < 21) return "th"; // Covers 4-20
+        switch (day % 10) {
+            case 1: return "st";
+            case 2: return "nd";
+            case 3: return "rd";
+            default: return "th";
+        }
+    }
+
+    return `${day}${getOrdinalSuffix(day)} ${month}, ${year}`;
+}
+
+function getRandomANInvoice() {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const numbers = "0123456789";
 
@@ -89,18 +166,49 @@ function getRandomANInvoice() {    //INV-ABC123456
         return Array.from({ length }, () => source[Math.floor(Math.random() * source.length)]).join('');
     }
 
-    const randomLetters = getRandomChars(letters, 3); // Generate 3 random letters
-    const randomNumbers = getRandomChars(numbers, 6); // Generate 6 random numbers
+    const part1 = getRandomChars(letters + numbers, 3); // 3 random alphanumeric characters
+    const part2 = getRandomChars(letters + numbers, 4); // 4 random alphanumeric characters
+    const part3 = getRandomChars(letters + numbers, 4); // 4 random alphanumeric characters
 
-    return `INV-${randomLetters}${randomNumbers}`;
+    return `${part1}-${part2}-${part3}`;
+}
+
+function getRandomProductID() {   
+    const numbers = "0123456789";
+
+    function getRandomChars(source, length) {
+        return Array.from({ length }, () => source[Math.floor(Math.random() * source.length)]).join('');
+    }
+
+    return getRandomChars(numbers, 10); // Generate 10 random digits
+}
+
+function getRandomGuID() {   
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numbers = "0123456789";
+
+    function getRandomChars(source, length) {
+        return Array.from({ length }, () => source[Math.floor(Math.random() * source.length)]).join('');
+    }
+
+    return (
+        getRandomChars(letters, 2) + // 2 Letters
+        getRandomChars(numbers, 4) + // 4 Numbers
+        getRandomChars(letters, 1) + // 1 Letter
+        getRandomChars(numbers, 1) + // 1 Number
+        getRandomChars(letters, 6)   // 6 Letters
+    );
 }
 
 // Function to replace placeholders in the HTML template
 function replacePlaceholders(htmlContent, billName, remail) {
     return htmlContent
-        .replace(/###/g, helpDeskNumber)
-        .replace(/##/g, billName)
-        .replace(/&&/g, remail);
+        .replace(/#phone#/g, helpDeskNumber)
+        .replace(/#invoice#/g, billName)
+        .replace(/#name#/g, getRandomElement(names))
+        .replace(/#product#/g, productId)
+        .replace(/#guid#/g, guId)
+        .replace(/#date#/g, date);
 }
 
 // Function to convert HTML to PDF using html-pdf and save it to the specified output path
@@ -137,22 +245,39 @@ async function sendEmails() {
         // Read and replace placeholders in the HTML template before converting to PDF
         const htmlContent = fs.readFileSync(getRandomElement(htmlTemplates), 'utf-8');
         
-        const billName = getRandomANInvoice();
+        
         const updatedHtmlContent = replacePlaceholders(htmlContent, billName, receiver.email);
         // Generate a random string for the PDF file name
         // const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 8);
-        const fileName = `${billName}.pdf`; // Properly formatted filename
+        const fileName = `INV-${billName}.pdf`; // Properly formatted filename
         const pdfPath = path.join(__dirname, fileName); // Ensure the path uses the actual filename
-
+        const From = getRandomElement(from);
         try {
             // Convert HTML content to a PDF and save it to the specified path
             await convertHtmlToPdf(updatedHtmlContent, pdfPath);
 
             const mailOptions = {
-                from: `"${getRandomElement(from)}" <${sender.email}>`,
+                from: `"${From}" <${sender.email}>`,
                 to: receiver.email,
-                subject: getRandomElement(subjects),
-                text: `${getRandomElement(bodies)} Invoice Number: ${billName}`, // Random body text for the email
+                subject: getRandomElement(subjectsE),
+                text: `${getRandomElement(bodies)}
+
+Invoice Number: INV-${billName}
+
+Regards,
+${From}`, // Random body text for the email
+                // html: '<!DOCTYPE html>'+
+                //         '<html><head><title>Appointment</title>'+
+                //         '</head><body><div>'+
+                //         '<img src="http://evokebeautysalon1.herokuapp.com/main/img/logo.png" alt="" width="160">'+
+                //         '<p>Thank you for your appointment.</p>'+
+                //         '<p>Here is summery:</p>'+
+                //         '<p>Name: James Falcon</p>'+
+                //         '<p>Date: Feb 2, 2017</p>'+
+                //         '<p>Package: Hair Cut </p>'+
+                //         '<p>Arrival time: 4:30 PM</p>'+
+                //         '</div></body>'+
+                //         '</html>',
                 attachments: [{ filename: fileName, path: pdfPath }], // Attach the generated PDF
                 headers: {
                     // List-Unsubscribe header to aid in spam avoidance
