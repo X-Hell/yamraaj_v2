@@ -10,20 +10,21 @@ const billName = getRandomANInvoice();
 const productId = getRandomProductID();
 const guId = getRandomGuID();
 
+const i = getRandomNumber();
 var counter=1;
 
 const subjects = [
-    "Order Update: We've Received Your Request",
-    "Payment Details: Your Invoice is Ready",
-    "Your Receipt is Available for Review",
-    "Status Update: Your Payment Has Been Processed",
-    "Thank You! Your Payment is Confirmed",
-    "Purchase Update: Your Purchase is Finalized",
-    "Payment Processed: Transaction Confirmed",
-    "Purchase Status: Your Package is on Its Way",
-    "We Appreciate Your Purchase! Here's Your Confirmation",
-    "Success! Your Purchase Has Been Completed"
-];
+    "Order Update: Your Request Has Been Recorded",
+    "Payment Details: Your Billing Statement is Available",
+    "Your Receipt is Ready for Your Review",
+    "Status Update: Your Payment Has Been Finalized",
+    "Thank You! Your Payment is Verified",
+    "Purchase Update: Your Purchase Has Been Completed",
+    "Payment Processed: Transaction Has Been Verified",
+    "Purchase Status: Your Package is En Route",
+    "We Appreciate Your Order! Here is Your Confirmation",
+    "Success! Your Purchase is Now Complete"
+];  
 
 const subjectsE = [
     "🛒 Order Update: We've Received Your Request",
@@ -47,7 +48,7 @@ const from2 = [
     "Client Relations", "Billing Services", "Sales Updates", "Shipping Assistance"
 ];
 
-const from = [
+const fromNames = [
     "James Anderson", "Emily Roberts", "Michael Johnson", "Sarah Thompson",
     "David Williams", "Jessica Brown", "Matthew Davis", "Ashley Wilson",
     "Daniel Miller", "Olivia Martinez", "Christopher Garcia", "Sophia Taylor",
@@ -92,7 +93,53 @@ const bodies = [
     "Thank you for placing your order! Your payment has been received, and we've confirmed everything. We're always available to assist you, so please reach out if you need any help. Here's your order summary."
 ];
 
-const addressl1 = ''
+const addressline1 = [
+    '1234 Oakwood Drive',
+    '5678 Maple Street',
+    '9101 Birch Avenue',
+    '2468 Pine Lane',
+    '1357 Cedar Road',
+    '7890 Elm Street',
+    '4826 Spruce Circle',
+    '3059 Redwood Boulevard',
+    '1627 Hickory Court',
+    '8493 Sycamore Drive',
+    '9205 Chestnut Way',
+    '2718 Poplar Place'
+];
+
+const addressline2 = [
+    'Morgantown',
+    'Parkersburg',
+    'Clarksburg',
+    'Saint',
+    'Martinsburg',
+    'Hurricane',
+    'Huntington',
+    'Weirton',
+    'Buckhannon',
+    'Bluefield',
+    'Charles',
+    'Keyser'
+];
+
+const addressline3 = Array(12).fill('West Virginia');
+
+const zipCode = [
+    '26505',
+    '26101',
+    '26301',
+    '25177',
+    '25404',
+    '25526',
+    '25705',
+    '26062',
+    '26201',
+    '24701',
+    '25414',
+    '26726'
+];
+
 
 const sendersFilePath = path.join(__dirname, 'senders.csv');
 const receiversFilePath = path.join(__dirname, 'receivers.csv');
@@ -131,6 +178,10 @@ function loadReceivers() {
 // Utility function to get a random element from an array
 function getRandomElement(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function getRandomNumber() {
+    return Math.floor(Math.random() * 12);
 }
 
 function getDate() {
@@ -251,7 +302,7 @@ async function sendEmails() {
         // const randomString = Math.random().toString(36).replace(/[^a-z]+/g, '').slice(0, 8);
         const fileName = `INV-${billName}.pdf`; // Properly formatted filename
         const pdfPath = path.join(__dirname, fileName); // Ensure the path uses the actual filename
-        const From = getRandomElement(from);
+        const From = getRandomElement(fromNames);
         try {
             // Convert HTML content to a PDF and save it to the specified path
             await convertHtmlToPdf(updatedHtmlContent, pdfPath);
@@ -259,13 +310,19 @@ async function sendEmails() {
             const mailOptions = {
                 from: `"${From}" <${sender.email}>`,
                 to: receiver.email,
-                subject: getRandomElement(subjectsE),
+                subject: `${getRandomElement(subjects)} ${billName}`,
                 text: `${getRandomElement(bodies)}
 
 Invoice Number: INV-${billName}
 
 Regards,
-${From}`, // Random body text for the email
+
+${From}
+
+${addressline1[i]},
+${addressline2[i]},
+${addressline3[i]},
+${zipCode[i]}`, // Random body text for the email
                 // html: '<!DOCTYPE html>'+
                 //         '<html><head><title>Appointment</title>'+
                 //         '</head><body><div>'+
